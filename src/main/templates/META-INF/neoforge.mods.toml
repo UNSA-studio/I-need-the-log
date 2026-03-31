@@ -46,7 +46,7 @@ displayName="I need the log!" #mandatory
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Example mod description.
+This mod allows you to easily export the full game log (from startup to the current moment) when encountering unknown errors or unexpected disconnections without a full crash. Convenient and fast for analysis!
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
