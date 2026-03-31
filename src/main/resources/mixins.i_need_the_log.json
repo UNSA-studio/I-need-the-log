@@ -4,8 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "i_need_the_log.refmap.json",
   "client": [
-    "CrashReportScreenMixin",
-    "DisconnectedScreenMixin"
+    "MainMenuScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
