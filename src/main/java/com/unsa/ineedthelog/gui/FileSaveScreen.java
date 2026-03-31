@@ -29,7 +29,7 @@ public class FileSaveScreen extends Screen {
         this.pathField.setValue(defaultPath);
         this.addRenderableWidget(this.pathField);
 
-        boolean isChinese = isChineseLanguage();
+        boolean isChinese = System.getProperty("user.language", "en").startsWith("zh");
         String saveText = isChinese ? "保存" : "Save";
         String backText = isChinese ? "返回" : "Back";
 
@@ -65,7 +65,7 @@ public class FileSaveScreen extends Screen {
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        boolean isChinese = isChineseLanguage();
+        boolean isChinese = System.getProperty("user.language", "en").startsWith("zh");
         String instruction = isChinese ? "请输入文件路径（绝对或相对游戏目录）" :
                 "Enter file path (absolute or relative to game dir)";
         guiGraphics.drawCenteredString(this.font, instruction,
@@ -79,17 +79,6 @@ public class FileSaveScreen extends Screen {
                     this.width / 2, this.height / 2 + 80, color);
             feedbackTimer--;
             if (feedbackTimer <= 0) feedbackMessage = null;
-        }
-    }
-
-    private boolean isChineseLanguage() {
-        try {
-            // 使用游戏语言管理器（避免编译错误，用反射或直接判断语言代码）
-            String lang = Minecraft.getInstance().getLanguageManager().getSelected().getLanguage();
-            return lang.startsWith("zh");
-        } catch (Exception e) {
-            // 回退到系统语言
-            return System.getProperty("user.language", "en").startsWith("zh");
         }
     }
 }
