@@ -198,3 +198,7 @@ jar {
         ])
     }
 }
+
+configurations {
+    compileClasspath.extendsFrom(neoForge)
+}
