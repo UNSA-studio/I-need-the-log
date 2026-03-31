@@ -31,11 +31,19 @@ public class FileSaveScreen extends Screen {
                     String path = this.pathField.getValue();
                     boolean success = LogExporter.exportLogToFile(path);
                     if (success) {
-                        Minecraft.getInstance().player.displayClientMessage(
-                                Component.literal("Log saved to: " + path), false);
+                        if (Minecraft.getInstance().player != null) {
+                            Minecraft.getInstance().player.displayClientMessage(
+                                    Component.literal("Log saved to: " + path), false);
+                        } else {
+                            System.out.println("Log saved to: " + path);
+                        }
                     } else {
-                        Minecraft.getInstance().player.displayClientMessage(
-                                Component.literal("Failed to save, check path"), false);
+                        if (Minecraft.getInstance().player != null) {
+                            Minecraft.getInstance().player.displayClientMessage(
+                                    Component.literal("Failed to save, check path"), false);
+                        } else {
+                            System.out.println("Failed to save, check path");
+                        }
                     }
                     this.onClose();
                 })
