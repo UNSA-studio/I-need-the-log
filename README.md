@@ -1,25 +1,12 @@
+# I Need Logs!
 
-Installation information
-=======
+===========
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+## Prerequisites
+- This mod is modified based on the template files officially released by NeoForge. Therefore, contributor information defaults to the official one unless you manually check the details to see the correct attribution.
+- The mod's code is written and compiled by AI, and packaged using GitHub Actions. Some issues may be unusual, so please bear with us.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
-
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
-
-Mapping Names:
 ============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+## Features
+This mod allows you to easily export the full game log (from startup to the current moment) when encountering unknown errors or unexpected disconnections without a full crash. Convenient and fast for analysis!
