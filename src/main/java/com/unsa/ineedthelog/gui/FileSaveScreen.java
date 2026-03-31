@@ -9,6 +9,11 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class FileSaveScreen extends Screen {
     private final Screen parent;
     private EditBox pathField;
@@ -24,7 +29,7 @@ public class FileSaveScreen extends Screen {
     protected void init() {
         String defaultPath = ModConfig.COMMON.exportPath.get();
         this.pathField = new EditBox(this.font, this.width / 2 - 100, this.height / 2 - 20, 200, 20,
-                Component.literal("文件路径"));
+                Component.literal("文件路径（目录或完整文件路径）"));
         this.pathField.setMaxLength(256);
         this.pathField.setValue(defaultPath);
         this.addRenderableWidget(this.pathField);
@@ -32,14 +37,42 @@ public class FileSaveScreen extends Screen {
         Button saveButton = Button.builder(
                 Component.literal("保存"),
                 button -> {
-                    String path = this.pathField.getValue();
-                    boolean success = LogExporter.exportLogToFile(path);
+                    String userPath = this.pathField.getValue().trim();
+                    if (userPath.isEmpty()) {
+                        feedbackMessage = "路径不能为空！";
+                        feedbackTimer = 80;
+                        return;
+                    }
+
+                    // 确定最终导出路径
+                    String finalPath = userPath;
+                    // 如果用户输入不是以 .log 或 .txt 结尾，视为目录，自动生成时间戳文件名
+                    if (!userPath.endsWith(".log") && !userPath.endsWith(".txt")) {
+                        // 生成时间戳文件名: YYYY.MM.DD_HH:mm-ERROR-LOG.txt
+                        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd_HH:mm"));
+                        String fileName = timestamp + "-ERROR-LOG.txt";
+                        // 确保路径以分隔符结尾
+                        Path dir = Paths.get(userPath);
+                        if (!userPath.endsWith("/") && !userPath.endsWith("\\")) {
+                            // 简单处理，确保目录分隔符正确，这里不做复杂处理，交给 Paths
+                            dir = dir.resolve(fileName);
+                        } else {
+                            dir = dir.resolve(fileName);
+                        }
+                        finalPath = dir.toString();
+                    }
+
+                    boolean success = LogExporter.exportLogToFile(finalPath);
                     if (success) {
-                        feedbackMessage = "日志已保存至 " + path;
+                        feedbackMessage = "日志已保存至 " + finalPath;
                     } else {
                         feedbackMessage = "保存失败，请检查路径";
                     }
                     feedbackTimer = 80;
+
+                    // 保存用户输入的原始路径到配置（下次默认显示）
+                    ModConfig.COMMON.exportPath.set(userPath);
+                    ModConfig.COMMON_SPEC.save();
                 })
                 .bounds(this.width / 2 - 50, this.height / 2 + 20, 100, 20)
                 .build();
