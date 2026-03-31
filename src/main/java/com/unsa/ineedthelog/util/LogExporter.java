@@ -2,7 +2,6 @@ package com.unsa.ineedthelog.util;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
 
 import java.io.*;
 import java.nio.file.*;
@@ -60,16 +59,19 @@ public class LogExporter {
         info.append("Java version: ").append(System.getProperty("java.version")).append("\n");
         info.append("Java Publisher: ").append(System.getProperty("java.vendor")).append("\n");
         info.append("Minecraft version: ").append(mc.getLaunchedVersion()).append("\n");
-        info.append("Module driver: NeoForge ").append(FMLEnvironment.version).append("\n");
+        // 获取 NeoForge 版本
+        String neoVersion = ModList.get().getModContainerById("neoforge")
+                .map(container -> container.getModInfo().getVersion().toString())
+                .orElse("Unknown");
+        info.append("Module driver: NeoForge ").append(neoVersion).append("\n");
         info.append("Number of modules: ").append(ModList.get().size()).append("\n");
         info.append("Minecraft Launcher: ").append(System.getProperty("minecraft.launcher.brand", "Unknown")).append(" ").append(System.getProperty("minecraft.launcher.version", "")).append("\n");
         info.append("Storage allocated to Minecraft: ").append(Runtime.getRuntime().maxMemory() / 1024 / 1024).append(" MB\n");
         info.append("Equipment system: ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.version")).append(" (").append(System.getProperty("os.arch")).append(")\n");
-        info.append("Rendering method: ").append("OpenGL ES 3.2 (Krypton)"); // 简化，不深入获取
-        info.append("\n");
+        info.append("Rendering method: OpenGL ES 3.2 (Krypton)\n");
         info.append("Login method: ").append(mc.getUser().getType() != null ? mc.getUser().getType().toString() : "Unknown").append("\n");
         info.append("CPU information: ").append(System.getenv("PROCESSOR_IDENTIFIER") != null ? System.getenv("PROCESSOR_IDENTIFIER") : "Unknown").append("\n");
-        info.append("GPU UNK0：").append("Mali-G71 (Krypton wrapper)").append("\n");
+        info.append("GPU UNK0：Mali-G71 (Krypton wrapper)\n");
         info.append("Crash Zone: <not specified>\n");
         info.append("Minecraft Crash Code: N/A\n");
         info.append("Average performance index: N/A\n");
