@@ -29,10 +29,16 @@ public class Ineedthelog {
         event.enqueueWork(() -> {
             LOGGER.info("Client setup: firstRun = {}", ModConfig.COMMON.firstRun.get());
             if (ModConfig.COMMON.firstRun.get()) {
-                LOGGER.info("Showing first run setup screen");
-                Minecraft.getInstance().execute(() -> {
-                    Minecraft.getInstance().setScreen(new FirstRunSetupScreen());
-                });
+                LOGGER.info("Showing first run setup screen (delayed)");
+                // 延迟1秒，确保游戏窗口完全加载
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignored) {}
+                    Minecraft.getInstance().execute(() -> {
+                        Minecraft.getInstance().setScreen(new FirstRunSetupScreen());
+                    });
+                }).start();
             }
         });
     }
