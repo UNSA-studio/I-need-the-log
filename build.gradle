@@ -118,7 +118,6 @@ configurations {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neo_version}"
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -192,10 +191,9 @@ idea {
     }
 }
 
-def generatedResources = file("build/generated/sources/modMetadata")
-
-var generateModMetadata = tasks.register("generateModMetadata", Copy) {
-    var replaceProperties = [
+// 生成模组元数据（替换变量）
+tasks.register('generateModMetadata', Copy) {
+    def replaceProperties = [
             minecraft_version      : minecraft_version,
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
@@ -204,16 +202,22 @@ var generateModMetadata = tasks.register("generateModMetadata", Copy) {
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
-            mod_description        : mod_description,
+            mod_description        : mod_description
     ]
     inputs.properties replaceProperties
     from "src/main/templates"
-    into generatedResources
+    into "build/generated/sources/modMetadata"
     expand replaceProperties
 }
 
-sourceSets.main.resources.srcDir(generatedResources)
+// 将生成的目录添加到资源源集
+sourceSets.main.resources.srcDir "build/generated/sources/modMetadata"
 
+// 确保资源处理任务依赖元数据生成
 tasks.withType(ProcessResources).configureEach {
-    dependsOn(generateModMetadata)
+    dependsOn tasks.named('generateModMetadata')
 }
+
+// 让 IDE 同步时也执行元数据生成
+neoForge.ideSyncTask tasks.named('generateModMetadata')
+
