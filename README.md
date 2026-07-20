@@ -1,6 +1,6 @@
 # I need the log!
 
-#The project has been abandoned
+The project has been abandoned
 
 ## Prerequisites
 - This mod is modified based on the template files officially released by NeoForge. Therefore, contributor information defaults to the official one unless you manually check the details to see the correct attribution.
